@@ -1,0 +1,11 @@
+{
+  "generator-starknet": {
+    "promptValues": {
+      "projectName": "starknet-vote",
+      "outputDir": "/home/cchalop1/project/starknet-vote",
+      "framework": "Nile",
+      "wantERC20": false,
+      "wantERC721": false
+    }
+  }
+}
