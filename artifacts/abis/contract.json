@@ -1,22 +1,44 @@
 [
     {
-        "inputs": [
+        "members": [
             {
-                "name": "amount",
+                "name": "creator",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "text",
+                "offset": 1,
                 "type": "felt"
             }
         ],
-        "name": "increase_balance",
+        "name": "Proposal",
+        "size": 2,
+        "type": "struct"
+    },
+    {
+        "inputs": [
+            {
+                "name": "text",
+                "type": "felt"
+            }
+        ],
+        "name": "create_proposal",
         "outputs": [],
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "get_balance",
+        "inputs": [
+            {
+                "name": "idx",
+                "type": "felt"
+            }
+        ],
+        "name": "get_proposal",
         "outputs": [
             {
                 "name": "res",
-                "type": "felt"
+                "type": "Proposal"
             }
         ],
         "stateMutability": "view",

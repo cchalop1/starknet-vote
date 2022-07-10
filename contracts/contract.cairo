@@ -2,10 +2,10 @@
 %lang starknet
 
 from starkware.cairo.common.cairo_builtins import HashBuiltin
+from starkware.starknet.common.syscalls import get_caller_address
 
 struct Proposal:
-    member id: felt
-    member creator_id: felt
+    member creator: felt
     member text: felt
 end
 
@@ -16,7 +16,15 @@ struct Answer:
     member count: felt
 end
 
+
 # array of proposal
+@storage_var
+func proposals(idx: felt) -> (proposal: Proposal):
+end
+
+@storage_var
+func proposals_len() -> (count: felt):
+end
 
 # array of answer
 
@@ -25,20 +33,22 @@ end
 # external function for create a proposal
 
 @external
-func create_proposal{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}:
+func create_proposal{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(text: felt):
     let (sender_address) = get_caller_address()
 
-end
+    let proposal = Proposal(creator=sender_address, text=text)
+    let idx = proposals_len.read()
+    
+    proposals.write(idx.count, proposal)
+    proposals_len.write(idx.count + 1)
 
-
-@storage_var
-func balance() -> (res : felt):
+    return ()
 end
 
 # Returns the current balance.
 @view
-func get_balance{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (
-        res : felt):
-    let (res) = balance.read()
+func get_proposal{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(idx: felt) -> (
+        res : Proposal):
+    let (res) = proposals.read(idx)
     return (res)
 end
