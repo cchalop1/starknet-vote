@@ -1,5 +1,5 @@
 %lang starknet
-from src.main import create_proposal, get_proposal, count_proposals
+from src.main import create_proposal, get_proposal, count_proposals, vote_for_proposal, get_proposal_answers
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 
 
@@ -39,4 +39,33 @@ func test_get_proposal{syscall_ptr : felt*, range_check_ptr, pedersen_ptr : Hash
 end
 
 
+@external
+func test_vote_for_proposal{syscall_ptr : felt*, range_check_ptr, pedersen_ptr : HashBuiltin*}():
+    let text = 'test'
+    let max_vote = 3
 
+    create_proposal(text, max_vote)
+
+    vote_for_proposal(0, 1)
+
+    let (vote_count) = get_proposal_answers(0, 1)
+    assert vote_count = 1
+
+    # TODO: check is i can revote for this one
+
+    return ()
+end
+
+@external
+func test_vote_not_valid_for_proposal{syscall_ptr : felt*, range_check_ptr, pedersen_ptr : HashBuiltin*}():
+    let text = 'test'
+    let max_vote = 3
+
+    create_proposal(text, max_vote)
+
+    vote_for_proposal(0, 4)
+
+    # TODO: check is i can revote for this one
+
+    return ()
+end
