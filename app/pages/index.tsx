@@ -4,9 +4,11 @@ import ProposalList from "../components/ProposalList";
 
 const Home: NextPage = () => {
   return (
-    <div className="">
-      <CreateProposal />
-      <ProposalList />
+    <div className="flex justify-center w-full">
+      <div className="w-2/3">
+        <CreateProposal />
+        <ProposalList />
+      </div>
     </div>
   );
 };
