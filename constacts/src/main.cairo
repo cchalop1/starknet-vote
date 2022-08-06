@@ -51,12 +51,14 @@ func vote_for_proposal{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
 ):
     let (proposal) = get_proposal(proposal_id)
 
-    assert_not_zero(proposal.creator)
-    assert_le(option_id, proposal.max_vote)
+    # assert_not_zero(proposal.creator)
+    # assert_le(option_id, proposal.max_vote)
 
     let (amount) = answers.read(proposal_id, option_id)
 
     let (sender_address) = get_caller_address()
+    # TODO: check if address is not in blacklist
+    
     answers.write(proposal_id, option_id, amount + 1)
     blacklist_address.write(proposal_id, sender_address)
 
