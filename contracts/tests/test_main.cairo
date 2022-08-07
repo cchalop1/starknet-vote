@@ -24,6 +24,7 @@ end
 func test_get_proposal{syscall_ptr : felt*, range_check_ptr, pedersen_ptr : HashBuiltin*}():
     let (count) = count_proposals()
     assert count = 0
+    %{ stop_prank_callable = start_prank(123) %}
 
     let text = 'test'
     let max_vote = 3
@@ -34,6 +35,8 @@ func test_get_proposal{syscall_ptr : felt*, range_check_ptr, pedersen_ptr : Hash
     let (proposal) = get_proposal(0)
     assert proposal.text = text
     assert proposal.max_vote = max_vote
+    assert proposal.creator = 123
+    %{ stop_prank_callable() %}
     
     return ()
 end

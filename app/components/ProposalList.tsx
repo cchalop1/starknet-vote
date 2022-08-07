@@ -24,7 +24,7 @@ const ProposalList = () => {
   }
   
   return (
-    <div>
+    <div className="w-full">
       {Array.from(Array(proposalCount).keys()).map((idx) => (
         <Proposal contract={contract} id={idx} key={idx} />
       ))}

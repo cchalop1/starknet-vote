@@ -20,16 +20,17 @@ const Proposal = ({ contract, id }: ProposalType) => {
     if (data && data.length > 0) {
       const value = data[0];
       console.log(value.creator)
+      // console.log(value.creator)
       // TODO: format object for proposal
       return 
     }
   }, [data]);
 
-  console.log(data, loading);
+  // console.log(data, loading);
 
   return (
-    <div className="m-10 p-2">
-      <div>bonjour o</div>
+    <div className="m-10 p-2 rounded border">
+      <div>Hello</div>
     </div>
   );
 };
