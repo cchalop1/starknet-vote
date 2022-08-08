@@ -41,6 +41,7 @@ func create_proposal{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
 
     proposals.write(idx.count, proposal)
     proposals_len.write(idx.count + 1)
+    # TODO: add event
 
     return ()
 end

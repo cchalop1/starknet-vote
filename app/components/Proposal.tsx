@@ -2,6 +2,7 @@ import { useStarknetCall } from "@starknet-react/core";
 import { useMemo } from "react";
 import { Contract } from "starknet";
 import { toBN } from "starknet/dist/utils/number";
+import { feltToString, stringToFelt } from "../utils/felt";
 
 type ProposalType = {
   id: number;
@@ -19,7 +20,11 @@ const Proposal = ({ contract, id }: ProposalType) => {
   const proposal = useMemo(() => {
     if (data && data.length > 0) {
       const value = data[0];
-      console.log(value.creator)
+      // console.log(value.creator)
+      // console.log(value.max_vote.toNumber())
+      console.log(value.creator.toString(16))
+      const creator = feltToString(value.text)
+      console.log(creator)
       // console.log(value.creator)
       // TODO: format object for proposal
       return 

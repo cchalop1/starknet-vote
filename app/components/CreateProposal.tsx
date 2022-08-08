@@ -1,10 +1,18 @@
 import { useState } from "react";
 import { FiPlus, FiTrash2 } from "react-icons/fi";
 import * as IPFS from "ipfs-core";
+import { useStarknetInvoke } from "@starknet-react/core";
+import { useVoteContract } from "../hooks/useStrarkVote";
 
 type ProposalContent = {
   text: string;
   options: Array<string>;
+};
+
+const saveJsonToIpfs = async (json: any) => {
+  const ipfs = await IPFS.create();
+  const { cid } = await ipfs.add(JSON.stringify(json));
+  return cid.toString();
 };
 
 const CreateProposal = () => {
@@ -13,17 +21,31 @@ const CreateProposal = () => {
     options: [""],
   });
 
+  const { contract } = useVoteContract();
+  const { invoke, error } = useStarknetInvoke({
+    contract,
+    method: "create_proposal",
+  });
+  console.log(error);
+
   const createProposal = async (e: React.FormEvent) => {
     e.preventDefault();
     if (data.options.length === 0) {
       alert("You need to add some options");
       return;
     }
-    const ipfs = await IPFS.create();
-    const { cid } = await ipfs.add(JSON.stringify(data));
-    console.info(cid.toString());
-    // TODO: call contract create proposal
+    const cid = await saveJsonToIpfs(data);
+    console.log(cid);
+
+    const args = [cid, data.options.length];
+    const res = await invoke({
+      args,
+    }).catch((e) => {
+      console.error(e);
+    });
+    console.log(res);
     console.log(data);
+    // TODO: call contract create proposal
   };
 
   const addOption = () => {
