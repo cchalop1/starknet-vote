@@ -45,7 +45,7 @@ const CreateProposal = () => {
     });
     console.log(res);
     console.log(data);
-    // TODO: call contract create proposal
+    // TODO: lisen event
   };
 
   const addOption = () => {

@@ -29,6 +29,12 @@ end
 func blacklist_address(proposal_id : felt) -> (address : felt):
 end
 
+@event
+func proposal_created(
+    proposal_id: felt
+):
+end
+
 # external function for create a proposal
 @external
 func create_proposal{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
@@ -41,7 +47,8 @@ func create_proposal{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
 
     proposals.write(idx.count, proposal)
     proposals_len.write(idx.count + 1)
-    # TODO: add event
+    
+    proposal_created.emit(proposal_id=idx.count)
 
     return ()
 end
