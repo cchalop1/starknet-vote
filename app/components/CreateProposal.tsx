@@ -3,6 +3,8 @@ import { FiPlus, FiTrash2 } from "react-icons/fi";
 import * as IPFS from "ipfs-core";
 import { useStarknetInvoke } from "@starknet-react/core";
 import { useVoteContract } from "../hooks/useStrarkVote";
+import { toBN } from "starknet/dist/utils/number";
+import { strToShortStringFelt } from "../utils/str";
 
 type ProposalContent = {
   text: string;
@@ -26,7 +28,6 @@ const CreateProposal = () => {
     contract,
     method: "create_proposal",
   });
-  console.log(error);
 
   const createProposal = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,9 +36,21 @@ const CreateProposal = () => {
       return;
     }
     const cid = await saveJsonToIpfs(data);
-    console.log(cid);
 
-    const args = [cid, data.options.length];
+    let text1 = cid.slice(0, cid.length / 2);
+    let text2 = cid.slice(cid.length / 2, cid.length);
+    
+
+    text1 = strToShortStringFelt(text1);
+    text2 = strToShortStringFelt(text2);
+
+    console.log(text1, text2);
+
+    // remove last element of text1 and text2
+    console.log(text1, text2);
+    console.log(BigInt(text1), BigInt(text2));
+
+    const args = [text1, text2, data.options.length];
     const res = await invoke({
       args,
     }).catch((e) => {

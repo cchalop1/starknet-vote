@@ -4,16 +4,26 @@
 from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.starknet.common.syscalls import get_caller_address
 from starkware.cairo.common.math import assert_not_zero, assert_le
+from starkware.cairo.common.uint256 import Uint256
+
 
 struct Proposal:
     member creator : felt
-    member text : felt
     member max_vote : felt
+end
+
+struct TextProposal:
+    member text1 : felt
+    member text2 : felt
 end
 
 # array of proposal
 @storage_var
 func proposals(idx : felt) -> (proposal : Proposal):
+end
+
+@storage_var
+func text_proposals(idx : felt) -> (text : TextProposal):
 end
 
 @storage_var
@@ -38,14 +48,18 @@ end
 # external function for create a proposal
 @external
 func create_proposal{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    text : felt, max_vote : felt
+    text1 : felt, text2 : felt, max_vote : felt
 ):
     let (sender_address) = get_caller_address()
 
-    let proposal = Proposal(creator=sender_address, text=text, max_vote=max_vote)
+    let proposal = Proposal(creator=sender_address, max_vote=max_vote)
     let idx = proposals_len.read()
 
     proposals.write(idx.count, proposal)
+    
+    let text = TextProposal(text1=text1, text2=text2)
+    text_proposals.write(idx.count, text)
+    
     proposals_len.write(idx.count + 1)
     
     proposal_created.emit(proposal_id=idx.count)
@@ -59,7 +73,9 @@ func vote_for_proposal{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_c
 ):
     let (proposal) = get_proposal(proposal_id)
 
-    # assert_not_zero(proposal.creator)
+    let (address_blacklisted) = blacklist_address.read(proposal_id)
+    
+    assert address_blacklisted = 0
     # assert_le(option_id, proposal.max_vote)
 
     let (amount) = answers.read(proposal_id, option_id)
@@ -96,4 +112,12 @@ func count_proposals{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
 ):
     let (res) = proposals_len.read()
     return (res)
+end
+
+@view
+func view_proposal_text{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    proposal_id : felt
+) -> (text1 : felt, text2 : felt):
+    let (text) = text_proposals.read(proposal_id)
+    return (text.text1, text.text2)
 end

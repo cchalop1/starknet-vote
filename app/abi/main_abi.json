@@ -7,24 +7,34 @@
                 "type": "felt"
             },
             {
-                "name": "text",
-                "offset": 1,
-                "type": "felt"
-            },
-            {
                 "name": "max_vote",
-                "offset": 2,
+                "offset": 1,
                 "type": "felt"
             }
         ],
         "name": "Proposal",
-        "size": 3,
+        "size": 2,
         "type": "struct"
+    },
+    {
+        "data": [
+            {
+                "name": "proposal_id",
+                "type": "felt"
+            }
+        ],
+        "keys": [],
+        "name": "proposal_created",
+        "type": "event"
     },
     {
         "inputs": [
             {
-                "name": "text",
+                "name": "text1",
+                "type": "felt"
+            },
+            {
+                "name": "text2",
                 "type": "felt"
             },
             {
@@ -95,6 +105,27 @@
         "outputs": [
             {
                 "name": "res",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "proposal_id",
+                "type": "felt"
+            }
+        ],
+        "name": "view_proposal_text",
+        "outputs": [
+            {
+                "name": "text1",
+                "type": "felt"
+            },
+            {
+                "name": "text2",
                 "type": "felt"
             }
         ],

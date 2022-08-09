@@ -6,6 +6,6 @@ import StarkVote from "../abi/main_abi.json";
 export function useVoteContract() {
   return useContract({
     abi: StarkVote as Abi,
-    address: "0x072e977548c926846a2bc652b398c3c45eaed9ef81a34a69bf336969258b45a7",
+    address: "0x01f16149eeb1f0723caf37f62e47e200f4513b22bec775daaa191f126e7db122",
   });
 }
