@@ -24,7 +24,7 @@ const ProposalOption = (props: ProposalOptionProps) => {
 
   useEffect(() => {
     if (data) {
-      setVote(data.amount.toNumber());
+      setVote((data as any).amount.toNumber());
     }
   }, [data]);
 

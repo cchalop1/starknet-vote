@@ -43,8 +43,8 @@ const Proposal = ({ contract, id }: ProposalType) => {
   }, [data]);
   const proposal_content = useMemo(async () => {
     if (ipfsData && ipfsData.length > 0) {
-      const firstPart = ipfsData.text1.toString();
-      const secondePart = ipfsData.text2.toString();
+      const firstPart = (ipfsData as any).text1.toString();
+      const secondePart = (ipfsData as any).text2.toString();
 
       const ipfsHash =
         feltToString(toBN(firstPart)) + feltToString(toBN(secondePart));
@@ -53,7 +53,9 @@ const Proposal = ({ contract, id }: ProposalType) => {
         const res = await fetch(`https://ipfs.io/ipfs/${ipfsHash}`);
         const json = await res.json();
         setProposalContent(json);
-      } catch (e) {}
+      } catch (e) {
+        console.error(e);
+      }
 
       return {
         options: [],
@@ -67,7 +69,7 @@ const Proposal = ({ contract, id }: ProposalType) => {
       <div className="font-bold">{proposalContent.text}</div>
       <div className="">0x{proposal.creator}</div>
       <div className="mt-2 flex">
-        {proposalContent.options.map((option, key) => (
+        {proposalContent.options.map((option: string, key: number) => (
           <ProposalOption
             key={key}
             contract={contract}
